@@ -6,9 +6,10 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    phone: "",
+    username: "",
     password: "",
     confirm: "",
   });
@@ -16,34 +17,39 @@ const Signup = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirm) {
+      setError("Passwords do not match");
+      return;
+    }
+
     try {
-      if (formData.password !== formData.confirm) {
-        setError("Passwords do not match");
-        return;
-      }
-      if(formData.phone.length !== 10){
-        setError("Phone number should be 10 digits");
-        return;
-      }
-      
-      console.log(formData);
+      console.log("Form data:", formData);
       const response = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(formData),
       });
+
       const data = await response.json();
       console.log(data);
+      if (!response.ok) {
+        setError(data.message || "Something went wrong");
+        return;
+      }
       setFormData({
-        name: "",
+        firstName: "",
+        lastName: "",
         email: "",
-        phone: "",
+        username: "",
         password: "",
         confirm: "",
       });
       navigate("/login");
     } catch (error) {
       console.error("Error submitting User data:", error);
-      setError(JSON.stringify(error));
+      setError("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -68,13 +74,22 @@ const Signup = () => {
         >
           <h1 className="text-2xl text-center">Admin Signup</h1>
 
-          <label htmlFor="name">Name</label>
+          <label htmlFor="firstName">First Name</label>
           <input
             type="text"
-            name="name"
-            value={formData.name}
+            name="firstName"
+            value={formData.firstName}
             onChange={handleInputChange}
-            placeholder="Full Name"
+            placeholder="First Name"
+            required
+          />
+          <label htmlFor="lastName">Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            placeholder="Last Name"
             required
           />
 
@@ -88,13 +103,15 @@ const Signup = () => {
             required
           />
 
-          <label htmlFor="phone">Phone</label>
+          <label htmlFor="username">Username</label>
           <input
             type="text"
-            name="phone"
-            value={formData.phone}
+            name="username"
+            value={formData.username}
             onChange={handleInputChange}
-            placeholder="Phone Number"
+            placeholder="Username"
+            required
+            title="Username should be unique"
           />
 
           <label htmlFor="password">Password</label>
@@ -120,7 +137,7 @@ const Signup = () => {
           <input type="submit" value="Signup" />
           <div className="w-full gap-2 mt-2 text-right text-[#4f4f4f] hover:text-[#fff]">
             <Link to="/login">
-              <p>Already Have an Account ?</p>
+              <p>Already Have an Account?</p>
             </Link>
           </div>
         </form>

@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
+router.use(express.json()); // Add this line to parse JSON bodies
 
 const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
@@ -28,8 +29,8 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, phone, password } = req.body;
-    console.log(req.body);
+    const { firstName, lastName, email, username, password } = req.body;
+
     try {
       let user = await User.findOne({ email });
       if (user) {
@@ -38,8 +39,16 @@ router.post(
           .json({ errors: [{ msg: "User already exists" }] });
       }
 
+      user = await User.findOne({ username });
+      if (user) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Username already exists" }] });
+      }
+
       user = new User({
-        name,
+        firstName,
+        lastName,
         email,
         username,
         password,
@@ -87,7 +96,6 @@ router.post(
     }
 
     const { username, password } = req.body;
-
     try {
       let user = await User.findOne({ username });
       if (!user) {
@@ -115,7 +123,7 @@ router.post(
         { expiresIn: "1h" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.json({ token, user });
         }
       );
     } catch (err) {
