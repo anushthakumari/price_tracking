@@ -8,7 +8,6 @@ const Landing = ({ setSelectedProduct }) => {
     <div className="bg-black w-full min-h-dvh">
       <Hero />
       <Body setSelectedProduct={setSelectedProduct} />
-      <Footer />
     </div>
   );
 };

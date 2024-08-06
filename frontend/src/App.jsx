@@ -8,6 +8,7 @@ import TrackingPage from "./Pages/TrackingPage";
 import { useState } from "react";
 import DashboardHome from "./Pages/DashboardHome";
 import Footer from "./components/Footer";
+import About from "./Pages/About";
 
 const App = () => {
   const [selectedProduct, setSelectedProduct] = useState({
@@ -57,6 +58,7 @@ const App = () => {
               element={<TrackingPage selectedProduct={selectedProduct} />}
             />
           </Route>
+          <Route path="/about" element={<About />} />
         </Routes>
         <Footer />
       </BrowserRouter>

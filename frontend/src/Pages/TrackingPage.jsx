@@ -31,13 +31,15 @@ const TrackingPage = ({ selectedProduct }) => {
 
   return (
     <div className="text-white flex flex-col md:flex-row min-h-dvh">
-      {selectedProduct.image && <div className="bg-white flex items-center justify-center m-4 rounded w-full md:w-1/2">
-        <img
-          src={selectedProduct.image}
-          alt={selectedProduct.name}
-          className="w-3/4 md:w-1/2 rounded"
-        />
-      </div>}
+      {selectedProduct.image && (
+        <div className="bg-white flex items-center justify-center m-4 rounded w-full md:w-1/2">
+          <img
+            src={selectedProduct.image}
+            alt={selectedProduct.name}
+            className="w-3/4 md:w-1/2 rounded"
+          />
+        </div>
+      )}
       <section className="p-4 md:p-8 w-full  flex items-center flex-col justify-center">
         <h3 className="text-3xl font-light mb-2 text-white poppins pl-0 pt-8">
           {selectedProduct.productName.charAt(0).toUpperCase() +
@@ -55,7 +57,7 @@ const TrackingPage = ({ selectedProduct }) => {
         </p>
 
         {history.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-md mb-8">
+          <div className="bg-white p-4 rounded-lg shadow-md mb-8 w-1/2">
             <h2 className="text-xl font-semibold text-center mb-4 text-black poppins underline">
               Monthly Sales History
             </h2>

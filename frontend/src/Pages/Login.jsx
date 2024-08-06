@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Admin.css";
 import { jwtDecode } from "jwt-decode"; // Import jwt-decode
@@ -10,6 +10,11 @@ const Login = () => {
     password: "",
   });
   const { setUserData } = useUser();
+
+  useEffect(() => {
+    setUserData(null);
+  }, []);
+
   const [error, setError] = useState("");
   const handleFormSubmit = async (e) => {
     e.preventDefault();

@@ -15,11 +15,7 @@ const Header = () => {
                 Home
               </li>
             </Link>
-            <Link to="/contact">
-              <li className="nav-items hover:text-[#e90074] cursor-pointer">
-                Contact Us
-              </li>
-            </Link>
+
             <Link to="/about">
               <li className="nav-items hover:text-[#e90074] cursor-pointer">
                 About Us
@@ -33,11 +29,18 @@ const Header = () => {
               )}
             </Link>
             {userData && (
-              <Link to="/dashboard">
-                <li className="nav-items hover:text-[#e90074] cursor-pointer">
-                  Dashboard
-                </li>
-              </Link>
+              <>
+                <Link to="/dashboard">
+                  <li className="nav-items hover:text-[#e90074] cursor-pointer">
+                    Dashboard
+                  </li>
+                </Link>
+                <Link to="/login">
+                  <li className="nav-items hover:text-[#e90074] cursor-pointer">
+                    Logout
+                  </li>
+                </Link>
+              </>
             )}
           </ul>
         </nav>

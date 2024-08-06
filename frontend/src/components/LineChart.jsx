@@ -56,7 +56,7 @@ const LineChart = ({ dataSet }) => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center w-full">
       <Line data={dataForLine} options={options} />
     </div>
   );
