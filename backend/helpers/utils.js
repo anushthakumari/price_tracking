@@ -1,7 +1,23 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
 
-const parsePrice = (amount) => parseFloat(Number(amount.replace(/,/g, "")));
+const parsePrice = (str) => {
+  const regex = /([^\d.,]+)?\s*(\d+(?:,\d{3})*(?:\.\d+)?)$/;
+
+  const match = str.match(regex);
+
+  if (match) {
+    const currency = match[1] ? match[1].trim() : "";
+    const amount = parseFloat(match[2].replace(/,/g, ""));
+
+    return {
+      currency: currency,
+      amount: amount,
+    };
+  } else {
+    return 0;
+  }
+};
 
 const getHTML = async (url) => {
   try {
@@ -15,34 +31,70 @@ const getHTML = async (url) => {
     const { data: html } = await axios.get(url, config);
     return cheerio.load(html);
   } catch (error) {
-    console.error("Error fetching the HTML");
     console.log(error.response.status);
     throw error;
   }
 };
 
+const parseEbayProductPage = async (url) => {
+  const clean_url = url.split("?")[0];
+
+  const $_parsed_html = await getHTML(clean_url);
+
+  const priceStr = $_parsed_html(".x-price-primary")
+    .find(".ux-textspans")
+    .text();
+
+  const name = $_parsed_html(".x-item-title__mainTitle")
+    .find(".ux-textspans")
+    .text()
+    .trim();
+
+  const imageSrc = $_parsed_html(".ux-image-carousel-item img").attr("src");
+
+  const priceData = parsePrice(priceStr);
+
+  return {
+    imageSrc,
+    productName: name,
+    scrapeUrl: clean_url,
+    currentPrice: priceData.amount,
+    currencySymbol: priceData.currency,
+    productSource: "ebay",
+  };
+};
+
 const fethFromUrl = async (url, expected_price) => {
   const source = url.includes("amazon")
     ? "amazon"
-    : url.includes("flipkart")
-    ? "flipkart"
+    : url.includes("ebay")
+    ? "ebay"
     : "";
 
   if (source === "amazon") {
-    const $_parsed_html = await getHTML(url);
+    const clean_url = url.split("ref=")[0];
 
-    const price = $_parsed_html(
-      ".reinventPricePriceToPayMargin .a-price-whole"
-    ).text();
+    const $_parsed_html = await getHTML(clean_url);
+
+    const priceStr = $_parsed_html(".a-offscreen").text();
+
     const name = $_parsed_html("#productTitle").text().trim();
+    const imageSrc = $_parsed_html("#landingImage").attr("src");
 
-    const priceInt = parsePrice(price);
+    const priceData = parsePrice(priceStr);
 
     return {
+      imageSrc,
+      scrapeUrl: clean_url,
       productName: name,
-      currentPrice: priceInt,
+      currentPrice: priceData.amount,
+      currencySymbol: priceData.currency,
       productSource: source,
     };
+  }
+
+  if (source === "ebay") {
+    return await parseEbayProductPage(url);
   }
 };
 

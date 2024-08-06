@@ -9,16 +9,27 @@ const productSchema = new Schema(
       trim: true,
       unique: true,
     },
+
     productName: {
       type: String,
       required: true,
       trim: true,
     },
+
+    imageSrc: {
+      type: String,
+      trim: true,
+    },
+
     productSource: {
       type: String,
-      enum: ["flipkart", "amazon"],
       required: true,
     },
+
+    currencySymbol: {
+      type: String,
+    },
+
     currentPrice: {
       type: Number,
       required: true,

@@ -63,10 +63,12 @@ router.post(
       }
 
       const product = new Product({
-        productUrl,
+        productUrl: productResp.scrapeUrl,
         productName: productResp.productName,
         productSource: productResp.productSource,
         currentPrice: productResp.currentPrice,
+        imageSrc: productResp.imageSrc,
+        currencySymbol: productResp.currencySymbol,
         lastChecked: new Date(),
         status: true,
       });
