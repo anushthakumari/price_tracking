@@ -3,14 +3,10 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
-router.use(express.json()); // Add this line to parse JSON bodies
 
 const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// @route    POST api/auth/register
-// @desc     Register user
-// @access   Public
 router.post(
   "/register",
   [
@@ -29,7 +25,13 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { firstName, lastName, email, username, password } = req.body;
+    let { firstName, lastName, email, username, password } = req.body;
+
+    firstName = firstName.trim();
+    lastName = lastName.trim();
+    email = email.trim();
+    password = password.trim();
+    username = username.trim();
 
     try {
       let user = await User.findOne({ email });
@@ -67,22 +69,27 @@ router.post(
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: "1h" },
+        { expiresIn: "30d" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.json({
+            token,
+            user: {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              username: user.username,
+            },
+          });
         }
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send({ message: "Something went wrong!" });
     }
   }
 );
 
-// @route    POST api/auth/login
-// @desc     Authenticate user and get token
-// @access   Public
 router.post(
   "/login",
   [
@@ -95,7 +102,11 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { username, password } = req.body;
+    let { username, password } = req.body;
+
+    username = username.trim();
+    password = password.trim();
+
     try {
       let user = await User.findOne({ username });
       if (!user) {
@@ -120,22 +131,27 @@ router.post(
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: "1h" },
+        { expiresIn: "30d" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, user });
+          res.json({
+            token,
+            user: {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              username: user.username,
+            },
+          });
         }
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send({ message: "Something went wrong!" });
     }
   }
 );
 
-// @route    POST api/auth/logout
-// @desc     Logout user
-// @access   Private
 router.post("/logout", authMiddleware, (req, res) => {
   res.json({ msg: "Logged out successfully" });
 });
