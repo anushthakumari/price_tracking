@@ -1,9 +1,9 @@
 import Hero from "./../components/Hero";
 import Body from "./../components/Body";
-import {useUser} from "../userContext";
+import { useUser } from "../userContext";
 
 const Landing = ({ setSelectedProduct }) => {
-  const {userData} = useUser();
+  const { userData } = useUser();
   return (
     <div className="bg-black w-full min-h-dvh">
       <Hero />
