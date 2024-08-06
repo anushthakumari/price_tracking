@@ -31,16 +31,14 @@ const TrackingPage = ({ selectedProduct }) => {
 
   return (
     <div className="text-white flex flex-col md:flex-row min-h-dvh">
-      {selectedProduct.image && (
-        <div className="bg-white flex items-center justify-center m-4 rounded w-full md:w-1/2">
-          <img
-            src={selectedProduct.image}
-            alt={selectedProduct.name}
-            className="w-3/4 md:w-1/2 rounded"
-          />
-        </div>
-      )}
-      <section className="p-4 md:p-8 w-full  flex items-center flex-col justify-center">
+      <div className="bg-white flex items-center justify-center m-4 rounded w-full md:w-1/2">
+        <img
+          src={selectedProduct.imageSrc}
+          alt={selectedProduct.name}
+          className="w-3/4 md:w-1/2 rounded"
+        />
+      </div>
+      <section className="p-4 md:p-8 w-full md:w-1/2">
         <h3 className="text-3xl font-light mb-2 text-white poppins pl-0 pt-8">
           {selectedProduct.productName.charAt(0).toUpperCase() +
             selectedProduct.productName.slice(1)}
@@ -51,13 +49,13 @@ const TrackingPage = ({ selectedProduct }) => {
         <p className="underline text-[#4f4f4f] hover:text-[#FFF078] text-l mb-2">
           Product Description
         </p>
-        <p className="inter text-sm w-full md:w-3/4 mb-8 text-center">
+        <p className="inter text-sm w-full md:w-3/4 mb-8">
           {selectedProduct.productSource.charAt(0).toUpperCase() +
             selectedProduct.productSource.slice(1)}
         </p>
 
         {history.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-md mb-8 w-1/2">
+          <div className="bg-white p-4 rounded-lg shadow-md mb-8">
             <h2 className="text-xl font-semibold text-center mb-4 text-black poppins underline">
               Monthly Sales History
             </h2>
@@ -66,7 +64,7 @@ const TrackingPage = ({ selectedProduct }) => {
         )}
 
         {history.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-md w-1/2">
+          <div className="bg-white p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-center mb-4 text-black poppins underline">
               Price History Table
             </h2>

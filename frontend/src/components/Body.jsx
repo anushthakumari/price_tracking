@@ -107,18 +107,20 @@ const Body = ({ setSelectedProduct }) => {
         </div>
       )}
       {message && <p className="text-[#FFF078] text-center p-4">{message}</p>}
-
-      <div className="displayProducts-container grid grid-cols-1 gap-4 place-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
-        {listOfFilteredProducts.map((product) => (
-          <div
-            key={product.id}
-            className="w-full h-full flex items-center justify-center cursor-pointer"
-            onClick={() => handleSetSelectedProduct(product)}
-          >
-            <ProductCard data={product.productId} />
-          </div>
-        ))}
-      </div>
+      
+      {listOfFilteredProducts.length > 0 && (
+        <div className="displayProducts-container grid grid-cols-1 gap-4 place-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+          {listOfFilteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="w-full h-full flex items-center justify-center cursor-pointer"
+              onClick={() => handleSetSelectedProduct(product)}
+            >
+              <ProductCard data={product.productId} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

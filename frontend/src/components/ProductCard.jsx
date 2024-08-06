@@ -14,7 +14,8 @@ const ProductCard = ({ data }) => {
   const [productData, setProductData] = useState({
     productName: data?.productName || "No product name",
     currentPrice: data?.currentPrice || "N/A",
-    image: data?.image || "placeholder_image_url",
+    image: data?.imageSrc || "placeholder_image_url",
+    currency: data?.currencySymbol || "$",
   });
 
   const truncateText = (text, wordLimit) => {
@@ -59,13 +60,6 @@ const ProductCard = ({ data }) => {
         <p className="text-[#FF4191]">Loading...</p>
       ) : (
         <>
-          {/* <div className="w-full mb-4">
-            <img
-              src={productData.image}
-              className="w-full h-[200px] object-contain bg-white rounded"
-              alt="product"
-            />
-          </div> */}
           <div className="w-full flex justify-end items-center">
             <div
               className="w-12	h-12 text-right mb-4 flex items-center justify-center rounded hover:bg-white rounded-full p-2"
@@ -77,13 +71,21 @@ const ProductCard = ({ data }) => {
               />
             </div>
           </div>
+          <div className="w-full mb-4">
+            <img
+              src={productData.image}
+              className="w-full h-[200px] object-contain bg-white rounded"
+              alt="product"
+            />
+          </div>
 
           <h3 className="text-base font-light mb-2 text-white poppins text-center">
             {/* {truncateText(productData.productName, 5)} */}
             {productData.productName}
           </h3>
           <p className="text-[#FF4191] text-2xl quicksand mb-4 text-center">
-            ${productData.currentPrice}
+            {productData.currency}
+            {productData.currentPrice}
           </p>
         </>
       )}
