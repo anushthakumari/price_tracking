@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Admin.css";
-import {jwtDecode} from "jwt-decode"; // Import jwt-decode
-
+import { jwtDecode } from "jwt-decode"; // Import jwt-decode
+import { useUser } from "../userContext.jsx";
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+  const { setUserData } = useUser();
   const [error, setError] = useState("");
-  const [token, setToken] = useState("");
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const { username, password } = formData;
@@ -31,8 +31,9 @@ const Login = () => {
 
       const data = await response.json();
       console.log(data);
-      setToken(data.token);
+
       const decodedToken = jwtDecode(data.token);
+
       console.log(decodedToken);
       if (!response.ok) {
         throw new Error(data.message || "An error occurred");
@@ -43,7 +44,7 @@ const Login = () => {
       } else if (data.message === "Invalid credentials") {
         setError("Invalid credentials");
       } else {
-        // setUserData(data.admin);
+        setUserData(data);
         console.log("Admin logged in successfully");
         navigate("/dashboard");
       }

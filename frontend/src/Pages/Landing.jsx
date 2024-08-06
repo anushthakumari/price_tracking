@@ -1,14 +1,14 @@
 import React from "react";
 import Hero from "./../components/Hero";
 import Body from "./../components/Body";
-import Footer from './../components/Footer';
+import Footer from "./../components/Footer";
 
-const Landing = () => {
+const Landing = ({ setSelectedProduct }) => {
   return (
     <div className="bg-black w-full min-h-dvh">
       <Hero />
-      <Body />
-      <Footer/>
+      <Body setSelectedProduct={setSelectedProduct} />
+      <Footer />
     </div>
   );
 };
